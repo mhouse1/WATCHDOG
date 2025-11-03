@@ -10,6 +10,7 @@ RemainAfterExit=yes
 StandardOutput=journal
 StandardError=journal
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+Environment=TERM=linux
 
 [Install]
 WantedBy=multi-user.target
