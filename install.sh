@@ -23,6 +23,18 @@ echo "Copying display script to ${SCRIPT_TARGET}..."
 cp "${SCRIPT_DIR}/display.sh" "${SCRIPT_TARGET}"
 chmod +x "${SCRIPT_TARGET}"
 
+# Verify the script is executable and has proper shebang
+echo "Verifying script installation..."
+if [[ ! -x "${SCRIPT_TARGET}" ]]; then
+    echo "ERROR: Script ${SCRIPT_TARGET} is not executable!"
+    exit 1
+fi
+
+if ! head -n 1 "${SCRIPT_TARGET}" | grep -q "^#!/"; then
+    echo "ERROR: Script ${SCRIPT_TARGET} missing shebang line!"
+    exit 1
+fi
+
 # Copy the systemd service file
 echo "Installing systemd service to ${SERVICE_TARGET}..."
 cp "${SCRIPT_DIR}/${SERVICE_NAME}.service" "${SERVICE_TARGET}"

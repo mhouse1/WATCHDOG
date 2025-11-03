@@ -118,10 +118,32 @@ Should work on most Ubuntu and Debian-based systems with systemd.
 
 ## Troubleshooting
 
+### Service failing to start (Error 203/EXEC)
+If you see "Failed to execute" errors, try the repair script:
+```bash
+sudo ./repair.sh
+```
+
+Or run the test script to diagnose issues:
+```bash
+chmod +x test.sh
+./test.sh
+```
+
+Common causes:
+- Missing shebang line in script
+- Script not executable
+- Path issues
+
 ### Service not starting
 Check the service logs:
 ```bash
 sudo journalctl -u display-watchdog -f
+```
+
+View recent service status:
+```bash
+systemctl status display-watchdog.service
 ```
 
 ### Display settings not applying
@@ -137,6 +159,21 @@ fi
 
 ### Permission issues
 Ensure the installation script is run with sudo privileges.
+
+### Quick Fix Commands
+```bash
+# Test the installation
+./test.sh
+
+# Repair a broken installation
+sudo ./repair.sh
+
+# Manual script test
+sudo /usr/local/bin/display-watchdog.sh
+
+# Check if script is executable
+ls -la /usr/local/bin/display-watchdog.sh
+```
 
 ## License
 
