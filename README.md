@@ -61,6 +61,28 @@ sudo systemctl disable display-watchdog
 sudo systemctl enable display-watchdog
 ```
 
+### Monitoring Display Timeout
+
+Check current settings and status:
+```bash
+chmod +x status.sh
+./status.sh
+```
+
+Run a countdown to see when screen should blank (TTY only):
+```bash
+chmod +x countdown.sh
+./countdown.sh
+```
+
+**Important**: The `setterm` command only affects virtual consoles (TTY sessions). To test:
+1. Switch to a TTY with `Ctrl+Alt+F1` (or F2-F6)
+2. Login to your account
+3. Wait 5 minutes without keyboard/mouse activity
+4. Screen should blank automatically
+
+For graphical desktop environments, use your desktop's power management settings instead.
+
 ### Manual Configuration
 
 You can also run the display script manually without installing the service:
