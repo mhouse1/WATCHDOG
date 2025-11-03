@@ -1,0 +1,14 @@
+[Unit]
+Description=Display Watchdog - Auto Screen Blanking Service
+After=multi-user.target
+Wants=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/display-watchdog.sh
+RemainAfterExit=yes
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
