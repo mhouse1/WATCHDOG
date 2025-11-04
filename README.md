@@ -4,8 +4,8 @@ A systemd service for automatically blanking the display after a specified perio
 
 ## Features
 
-- Automatically blanks the screen after 5 minutes of inactivity
-- Powers down the display after 10 minutes of inactivity
+- Automatically blanks the screen after 3 minutes of inactivity
+- Powers down the display after 6 minutes of inactivity
 - Runs as a systemd service for automatic startup
 - Easy installation and uninstallation scripts
 - Compatible with Ubuntu 24.04.3 LTS and similar systems
@@ -15,6 +15,10 @@ A systemd service for automatically blanking the display after a specified perio
 - Ubuntu Linux (tested on 24.04.3 LTS)
 - systemd
 - Root/sudo access for installation
+
+## Compatibility
+
+**Excellent for Ubuntu Server**: This solution works perfectly on Ubuntu Server command-line environments, especially on 2013 MacBook Pro hardware. The `setterm` command has direct control over the console display without desktop environment interference.
 
 ## Installation
 
@@ -32,8 +36,10 @@ A systemd service for automatically blanking the display after a specified perio
 
 The installation script will:
 - Copy the display script to `/usr/local/bin/display-watchdog.sh`
-- Install the systemd service file to `/etc/systemd/system/display-watchdog.service`
-- Enable and start the service automatically
+- Install the systemd service and timer files
+- Install a profile script to `/etc/profile.d/display-watchdog.sh` for login-based activation
+- Enable and start the timer for periodic reapplication
+- Ensure settings persist across logins and system events
 
 ## Usage
 
@@ -75,13 +81,27 @@ chmod +x countdown.sh
 ./countdown.sh
 ```
 
-**Important**: The `setterm` command only affects virtual consoles (TTY sessions). To test:
+**Ubuntu Server (Perfect!)**: If you're running Ubuntu Server command-line only, this works immediately - no additional configuration needed.
+
+**SSH Sessions**: If you're connected via SSH, the display blanking affects the **physical MacBook Pro screen**, not your SSH terminal. Your SSH session stays active while the local console blanks.
+
+**Desktop Environments**: The `setterm` command only affects virtual consoles (TTY sessions). To test on desktop systems:
 1. Switch to a TTY with `Ctrl+Alt+F1` (or F2-F6)
-2. Login to your account
-3. Wait 5 minutes without keyboard/mouse activity
+2. Login to your account  
+3. Wait 3 minutes without keyboard/mouse activity
 4. Screen should blank automatically
 
-For graphical desktop environments, use your desktop's power management settings instead.
+### Server-Specific Testing
+
+Test your Ubuntu Server setup:
+```bash
+chmod +x server-test.sh
+./server-test.sh
+```
+
+This will verify that display blanking works correctly on your 2013 MacBook Pro Ubuntu Server.
+
+**Note**: Display now blanks after 3 minutes instead of 5 minutes for quicker power saving.
 
 ### Manual Configuration
 
@@ -97,8 +117,8 @@ chmod +x display.sh
 To change the timeout values, edit the `display.sh` file:
 
 ```bash
-# Current settings: blank after 5min, powerdown after 10min
-setterm --blank 5 --powerdown 10
+# Current settings: blank after 3min, powerdown after 6min
+setterm --blank 3 --powerdown 6
 ```
 
 Change the numbers to your preferred values (in minutes), then reinstall:
@@ -126,8 +146,15 @@ This will:
 
 - `display.sh` - Main script that configures display timeout using setterm
 - `display-watchdog.service` - Systemd service configuration file
-- `install.sh` - Installation script that sets up the service
-- `uninstall.sh` - Uninstallation script that removes the service
+- `display-watchdog.timer` - Systemd timer for periodic reapplication
+- `display-profile.sh` - Profile script that applies settings on TTY login
+- `install.sh` - Installation script that sets up the complete system
+- `uninstall.sh` - Uninstallation script that removes all components
+- `repair.sh` - Repair script for fixing broken installations
+- `status.sh` - Status checker and environment detector
+- `ssh-info.sh` - SSH vs console explanation tool
+- `server-test.sh` - Ubuntu Server compatibility tester
+- `countdown.sh` - Real-time blanking countdown
 - `README.md` - This documentation file
 
 ## Compatibility

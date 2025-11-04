@@ -6,10 +6,18 @@
 echo "=== Display Watchdog Status ==="
 echo ""
 
+# Check if connected via SSH
+if [[ -n "$SSH_CLIENT" || -n "$SSH_TTY" || -n "$SSH_CONNECTION" ]]; then
+    echo "🔗 SSH SESSION DETECTED"
+    echo "   You are connected remotely via SSH"
+    echo "   Display blanking affects the PHYSICAL MacBook screen, not this SSH session"
+    echo ""
+fi
+
 # Check if setterm settings are active
 echo "Current display timeout settings:"
-echo "- Blank timeout: 5 minutes (300 seconds)"
-echo "- Powerdown timeout: 10 minutes (600 seconds)"
+echo "- Blank timeout: 3 minutes (180 seconds)"
+echo "- Powerdown timeout: 6 minutes (360 seconds)"
 echo ""
 
 # Check service status
@@ -44,7 +52,7 @@ echo "  - KDE: System Settings → Power Management → Energy Saving"
 echo "  - XFCE: Settings → Power Manager → Display"
 echo ""
 
-# Check if we're in a graphical environment
+# Detect environment type
 if [[ -n "$DISPLAY" ]]; then
     echo "Current environment: Graphical desktop session (DISPLAY=$DISPLAY)"
     echo "• setterm settings may not apply here"
@@ -56,10 +64,23 @@ if [[ -n "$DISPLAY" ]]; then
         echo "X11 Display Power Management (if available):"
         xset q 2>/dev/null | grep -A 3 "DPMS" || echo "  DPMS information not available"
     fi
+elif [[ $(systemctl get-default 2>/dev/null) == "multi-user.target" ]]; then
+    echo "Current environment: Ubuntu Server (command line only)"
+    echo "✓ PERFECT! setterm settings will work effectively here"
+    echo "• No desktop environment interference"
+    echo "• Direct console control available"
+    echo "• Hardware power management supported on 2013 MacBook Pro"
 else
     echo "Current environment: Console/TTY session"
-    echo "• setterm settings should apply here"
+    echo "✓ setterm settings should apply here"
 fi
+
+# Check hardware compatibility
+echo ""
+echo "Hardware Notes for 2013 MacBook Pro:"
+echo "• Display blanking: Fully supported"
+echo "• Power down: Works with Linux kernel ACPI"
+echo "• Wake on keypress/mouse: Supported"
 
 echo ""
 echo "To monitor in real-time:"

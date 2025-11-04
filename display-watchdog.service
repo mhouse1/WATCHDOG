@@ -6,7 +6,7 @@ Wants=multi-user.target
 [Service]
 Type=oneshot
 ExecStart=/bin/bash /usr/local/bin/display-watchdog.sh
-RemainAfterExit=yes
+RemainAfterExit=no
 StandardOutput=journal
 StandardError=journal
 Environment=PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
