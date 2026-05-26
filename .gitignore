@@ -1,0 +1,20 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+docs/performance/logs/
+
+# Test output
+tests/test-output/
+!tests/test-output/.gitkeep
+
+# Local-only documents
+ignore/
